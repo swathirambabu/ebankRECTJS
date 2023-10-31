@@ -14,7 +14,7 @@ import {
 } from './styledComponents'
 
 class LoginPage extends Component {
-  state = {userId: '', userPin: '', errorMsg: '', loginError: ''}
+  state = {userId: '', userPin: '', errorMessage: '', loginError: ''}
 
   loginSuccess = jwtToken => {
     Cookies.set('jwt_token', jwtToken, {expires: 30})
@@ -23,7 +23,7 @@ class LoginPage extends Component {
   }
 
   loginError = errMsg => {
-    this.setState({loginError: true, errorMsg: errMsg})
+    this.setState({loginError: true, errorMessage: errMsg})
   }
 
   loginRequest = async event => {
@@ -53,7 +53,7 @@ class LoginPage extends Component {
   }
 
   render() {
-    const {userId, userPin, loginError, errorMsg} = this.state
+    const {userId, userPin, loginError, errorMessage} = this.state
     const jwtToken = Cookies.get('jwt_token')
     if (jwtToken !== undefined) {
       return <Redirect to="/" />
@@ -87,7 +87,7 @@ class LoginPage extends Component {
             />
 
             <LoginButton type="submit">Login</LoginButton>
-            {loginError ? <ErrorMsg>{errorMsg}</ErrorMsg> : null}
+            {loginError ? <ErrorMsg>{errorMessage}</ErrorMsg> : null}
           </LoginFormContainer>
         </LoginCardContainer>
       </LoginContainer>
