@@ -23,7 +23,7 @@ export const LogoBtn = styled.button`
   background: transparent;
   height: 40px;
   width: 120px;
-  font-size: 12px;
+  font-size: 14px;
   color: white;
   border: 1px solid white;
   cursor: pointer;
@@ -37,7 +37,7 @@ export const HomeDiv = styled.div`
   height: 100vh;
   width: 100%;
 `
-export const HomeH1 = styled.H1`
+export const HomeH1 = styled.h1`
   font-size: 44px;
   font-family: roboto;
   font-weight: bold;

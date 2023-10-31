@@ -1,7 +1,6 @@
-import Cookies from 'js-cookie'
 import {Component} from 'react'
+import Cookies from 'js-cookie'
 import {Redirect} from 'react-router-dom'
-
 import {
   LoginContainer,
   LoginCardContainer,
@@ -59,7 +58,6 @@ class LoginPage extends Component {
     if (jwtToken !== undefined) {
       return <Redirect to="/" />
     }
-
     return (
       <LoginContainer>
         <LoginCardContainer>
@@ -70,9 +68,7 @@ class LoginPage extends Component {
           <LoginFormContainer onSubmit={this.loginRequest}>
             <LoginHeading>Welcome Back!</LoginHeading>
 
-            <LoginInputLabel label for="ID">
-              User ID
-            </LoginInputLabel>
+            <LoginInputLabel htmlFor="ID">User ID</LoginInputLabel>
             <LoginInput
               type="text"
               id="ID"
@@ -81,16 +77,15 @@ class LoginPage extends Component {
               onChange={this.onChangeUserId}
             />
 
-            <LoginInputLabel label for="PIN">
-              PIN
-            </LoginInputLabel>
+            <LoginInputLabel htmlFor="PIN">PIN</LoginInputLabel>
             <LoginInput
-              type="text"
+              type="password"
               id="PIN"
               value={userPin}
               placeholder="Enter PIN"
               onChange={this.onChangeUserPin}
             />
+
             <LoginButton type="submit">Login</LoginButton>
             {loginError ? <ErrorMsg>{errorMsg}</ErrorMsg> : null}
           </LoginFormContainer>
