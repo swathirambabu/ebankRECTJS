@@ -17,8 +17,9 @@ class LoginPage extends Component {
   state = {userId: '', userPin: '', errorMessage: '', loginError: ''}
 
   loginSuccess = jwtToken => {
-    Cookies.set('jwt_token', jwtToken, {expires: 30})
     const {history} = this.props
+
+    Cookies.set('jwt_token', jwtToken, {expires: 30})
     history.replace('/')
   }
 
