@@ -1,38 +1,28 @@
+import {Redirect} from 'react-router-dom'
+
 import Cookies from 'js-cookie'
-import {
-  MainDiv,
-  NavBar,
-  LogoImg,
-  LogoBtn,
-  HomeDiv,
-  HomeH1,
-  HomeImg,
-} from './styledComponents'
 
-const Home = props => {
-  const onClickLogout = () => {
-    Cookies.remove('jwt_token')
-    const {history} = props
-    history.replace('/ebank/login')
+import Header from '../Header'
+
+import './index.css'
+
+const Home = () => {
+  const token = Cookies.get('jwt_token')
+  if (token === undefined) {
+    return <Redirect to="/ebank/login" />
   }
-
   return (
-    <MainDiv>
-      <NavBar>
-        <LogoImg
-          src="https://assets.ccbp.in/frontend/react-js/ebank-logo-img.png"
-          alt="website logo"
-        />
-        <LogoBtn onClick={onClickLogout}>Logout</LogoBtn>
-      </NavBar>
-      <HomeDiv>
-        <HomeH1>Your Flexibility, Our Excellence</HomeH1>
-        <HomeImg
+    <div className="h-con">
+      <Header />
+      <div className="hm">
+        <h1 className="heading">Your flexibility, Our Excellence</h1>
+        <img
           src="https://assets.ccbp.in/frontend/react-js/ebank-digital-card-img.png"
           alt="digital card"
+          className="card"
         />
-      </HomeDiv>
-    </MainDiv>
+      </div>
+    </div>
   )
 }
 export default Home

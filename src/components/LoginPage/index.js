@@ -1,36 +1,54 @@
 import {Component} from 'react'
+
 import Cookies from 'js-cookie'
+
 import {Redirect} from 'react-router-dom'
-import {
-  LoginContainer,
-  LoginCardContainer,
-  LoginImg,
-  LoginFormContainer,
-  LoginHeading,
-  LoginInputLabel,
-  LoginInput,
-  LoginButton,
-  ErrorMsg,
-} from './styledComponents'
 
-class LoginPage extends Component {
-  state = {userId: '', userPin: '', showSubmitError: false, errorMsg: ''}
+import './index.css'
 
-  loginSuccess = jwtToken => {
-    Cookies.set('jwt_token', jwtToken, {expires: 30, path: '/'})
+class Login extends Component {
+  state = {
+    userId: '',
+    pin: '',
+    se: false,
+    em: '',
+  }
+
+  one = event => {
+    this.setState({
+      userId: event.target.value,
+    })
+  }
+
+  two = event => {
+    this.setState({
+      pin: event.target.value,
+    })
+  }
+
+  success = jwtToken => {
     const {history} = this.props
+    Cookies.set('jwt_token', jwtToken, {
+      expires: 30,
+      path: '/',
+    })
+
     history.replace('/')
   }
 
-  loginFailure = errMsg => {
-    this.setState({showSubmitError: true, errorMsg: errMsg})
+  fail = em => {
+    this.setState({
+      se: true,
+      em,
+    })
   }
 
-  loginRequest = async event => {
+  BankLogin = async event => {
     event.preventDefault()
-    const {userId, userPin} = this.state
+    const {userId, pin} = this.state
+    const userDetails = {user_id: userId, pin}
     const url = 'https://apis.ccbp.in/ebank/login'
-    const userDetails = {userId, userPin}
+
     const options = {
       method: 'POST',
       body: JSON.stringify(userDetails),
@@ -38,61 +56,68 @@ class LoginPage extends Component {
     const response = await fetch(url, options)
     const data = await response.json()
     if (response.ok === true) {
-      this.loginSuccess(data.jwt_token)
+      this.success(data.jwt_token)
     } else {
-      this.loginFailure(data.error_msg)
+      this.fail(data.error_msg)
     }
-  }
-
-  onChangeUserId = event => {
-    this.setState({userId: event.target.value})
-  }
-
-  onChangeUserPin = event => {
-    this.setState({userPin: event.target.value})
   }
 
   render() {
-    const {userId, userPin, showSubmitError, errorMsg} = this.state
-    const jwtToken = Cookies.get('jwt_token')
-    if (jwtToken !== undefined) {
+    const {userId, pin, se, em} = this.state
+    const token = Cookies.get('jwt_token')
+    if (token !== undefined) {
       return <Redirect to="/" />
     }
+
     return (
-      <LoginContainer>
-        <LoginCardContainer>
-          <LoginImg
-            src="https://assets.ccbp.in/frontend/react-js/ebank-login-img.png"
-            alt="website login"
-          />
-
-          <LoginFormContainer onSubmit={this.loginRequest}>
-            <LoginHeading>Welcome Back!</LoginHeading>
-
-            <LoginInputLabel htmlFor="ID">User ID</LoginInputLabel>
-            <LoginInput
-              type="text"
-              id="ID"
-              value={userId}
-              placeholder="Enter User ID"
-              onChange={this.onChangeUserId}
+      <div className="main-con">
+        <div className="ct-con">
+          <div className="im-con">
+            <img
+              src="https://assets.ccbp.in/frontend/react-js/ebank-login-img.png"
+              alt="website login"
+              className="ima"
             />
-
-            <LoginInputLabel htmlFor="PIN">PIN</LoginInputLabel>
-            <LoginInput
-              type="password"
-              id="PIN"
-              value={userPin}
-              placeholder="Enter PIN"
-              onChange={this.onChangeUserPin}
-            />
-
-            <LoginButton type="submit">Login</LoginButton>
-            {showSubmitError === true && <ErrorMsg> {errorMsg} </ErrorMsg>}
-          </LoginFormContainer>
-        </LoginCardContainer>
-      </LoginContainer>
+          </div>
+          <form className="form-el" onSubmit={this.BankLogin}>
+            <h1 className="header"> Welcome Back! </h1>
+            <div className="inp-con">
+              <label htmlFor="user" className="lab">
+                User ID
+              </label>
+              <input
+                id="user"
+                placeholder="Enter User ID"
+                className="inp"
+                type="text"
+                value={userId}
+                onChange={this.one}
+              />
+            </div>
+            <div className="inp-con">
+              <label htmlFor="pin" className="lab">
+                PIN
+              </label>
+              <input
+                placeholder="Enter Pin"
+                id="pin"
+                className="inp"
+                type="password"
+                value={pin}
+                onChange={this.two}
+              />
+            </div>
+            <button className="but" type="submit">
+              Login
+            </button>
+            <div className="ct">
+              {se === true && <p className="ep"> {em} </p>}
+            </div>
+          </form>
+        </div>
+      </div>
     )
   }
 }
-export default LoginPage
+
+export default Login

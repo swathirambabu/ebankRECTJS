@@ -1,17 +1,21 @@
-import {Switch, Redirect, Route} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
+
+import LoginPage from './components/LoginPage'
 
 import Home from './components/Home'
+
 import NotFound from './components/NotFound'
-import LoginPage from './components/LoginPage'
+
 import './App.css'
 
+// Replace your code here
 const App = () => (
-  <Switch>
-    <Route exact path="/ebank/login" component={LoginPage} />
-    <Route exact path="/" component={Home} />
-    <Route path="/not-found" component={NotFound} />
-    <Redirect to="not-found" />
-  </Switch>
+  <div>
+    <Switch>
+      <Route exact path="/ebank/login" component={LoginPage} />
+      <Route exact path="/" component={Home} />
+      <NotFound />
+    </Switch>
+  </div>
 )
-
 export default App
