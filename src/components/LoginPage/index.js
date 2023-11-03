@@ -14,17 +14,16 @@ import {
 } from './styledComponents'
 
 class LoginPage extends Component {
-  state = {userId: '', userPin: '', errMessage: '', loginError: ''}
+  state = {userId: '', userPin: '', showSubmitError: false, errorMsg: ''}
 
   loginSuccess = jwtToken => {
-    const {history} = this.props
-
     Cookies.set('jwt_token', jwtToken, {expires: 30})
+    const {history} = this.props
     history.replace('/')
   }
 
-  loginError = errMsg => {
-    this.setState({loginError: true, errMessage: errMsg})
+  loginFailure = errMsg => {
+    this.setState({showSubmitError: true, errorMsg: errMsg})
   }
 
   loginRequest = async event => {
@@ -41,7 +40,7 @@ class LoginPage extends Component {
     if (response.ok === true) {
       this.loginSuccess(data.jwt_token)
     } else {
-      this.loginError(data.error_msg)
+      this.loginFailure(data.error_msg)
     }
   }
 
@@ -54,7 +53,7 @@ class LoginPage extends Component {
   }
 
   render() {
-    const {userId, userPin, loginError, errMessage} = this.state
+    const {userId, userPin, showSubmitError, errorMsg} = this.state
     const jwtToken = Cookies.get('jwt_token')
     if (jwtToken !== undefined) {
       return <Redirect to="/" />
@@ -66,6 +65,7 @@ class LoginPage extends Component {
             src="https://assets.ccbp.in/frontend/react-js/ebank-login-img.png"
             alt="website login"
           />
+
           <LoginFormContainer onSubmit={this.loginRequest}>
             <LoginHeading>Welcome Back!</LoginHeading>
 
@@ -88,7 +88,7 @@ class LoginPage extends Component {
             />
 
             <LoginButton type="submit">Login</LoginButton>
-            {loginError ? <ErrorMsg>{errMessage}</ErrorMsg> : null}
+            {showSubmitError === true && <ErrorMsg> {errorMsg} </ErrorMsg>}
           </LoginFormContainer>
         </LoginCardContainer>
       </LoginContainer>
